@@ -2,7 +2,7 @@
 ---
 - name: Configure application servers
   hosts: all
-  become: yes 
+  become: true
   vars:
     app_env: "{{ lookup('env', 'ENVIRONMENT') | default('dev') }}"
   
