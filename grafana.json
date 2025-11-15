@@ -1,0 +1,54 @@
+{
+  "dashboard": {
+    "title": "Application Operations Dashboard",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Request Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{environment=\"$environment\"}[5m])",
+            "legendFormat": "{{ method }} {{ path }}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{status=~\"5..\",environment=\"$environment\"}[5m])",
+            "legendFormat": "{{ status }} {{ path }}"
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "System Health",
+        "targets": [
+          {
+            "expr": "up{environment=\"$environment\"}",
+            "legendFormat": "{{ instance }}"
+          }
+        ],
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            {"color": "red", "value": null},
+            {"color": "green", "value": 1}
+          ]
+        }
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "environment",
+          "type": "query",
+          "query": "label_values(environment)",
+          "current": {"text": "staging", "value": "staging"}
+        }
+      ]
+    }
+  }
+}
